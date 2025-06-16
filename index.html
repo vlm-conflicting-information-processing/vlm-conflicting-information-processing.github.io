@@ -1,0 +1,512 @@
+<script src="http://www.google.com/jsapi" type="text/javascript"></script> 
+<script type="text/javascript">google.load("jquery", "1.3.2");</script>
+
+<style type="text/css">
+	body {
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+		font-weight:300;
+		font-size:18px;
+		margin-left: auto;
+		margin-right: auto;
+		width: 1100px;
+	}
+	
+	h1 {
+		font-size:32px;
+		font-weight:300;
+	}
+	
+	.disclaimerbox {
+		background-color: #eee;		
+		border: 1px solid #eeeeee;
+		border-radius: 10px ;
+		-moz-border-radius: 10px ;
+		-webkit-border-radius: 10px ;
+		padding: 20px;
+	}
+
+	video.header-vid {
+		height: 140px;
+		border: 1px solid black;
+		border-radius: 10px ;
+		-moz-border-radius: 10px ;
+		-webkit-border-radius: 10px ;
+	}
+	
+	img.header-img {
+		height: 140px;
+		border: 1px solid black;
+		border-radius: 10px ;
+		-moz-border-radius: 10px ;
+		-webkit-border-radius: 10px ;
+	}
+	
+	img.rounded {
+		border: 1px solid #eeeeee;
+		border-radius: 10px ;
+		-moz-border-radius: 10px ;
+		-webkit-border-radius: 10px ;
+	}
+	
+	a:link,a:visited
+	{
+		color: #1367a7;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #208799;
+	}
+	
+	td.dl-link {
+		height: 160px;
+		text-align: center;
+		font-size: 22px;
+	}
+	
+	.layered-paper-big { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+		box-shadow:
+		0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+		5px 5px 0 0px #fff, /* The second layer */
+		5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+		10px 10px 0 0px #fff, /* The third layer */
+		10px 10px 1px 1px rgba(0,0,0,0.35), /* The third layer shadow */
+		15px 15px 0 0px #fff, /* The fourth layer */
+		15px 15px 1px 1px rgba(0,0,0,0.35), /* The fourth layer shadow */
+		20px 20px 0 0px #fff, /* The fifth layer */
+		20px 20px 1px 1px rgba(0,0,0,0.35), /* The fifth layer shadow */
+		25px 25px 0 0px #fff, /* The fifth layer */
+		25px 25px 1px 1px rgba(0,0,0,0.35); /* The fifth layer shadow */
+		margin-left: 10px;
+		margin-right: 45px;
+	}
+
+	.paper-big { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+		box-shadow:
+		0px 0px 1px 1px rgba(0,0,0,0.35); /* The top layer shadow */
+
+		margin-left: 10px;
+		margin-right: 45px;
+	}
+
+
+	.layered-paper { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+		box-shadow:
+		0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+		5px 5px 0 0px #fff, /* The second layer */
+		5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+		10px 10px 0 0px #fff, /* The third layer */
+		10px 10px 1px 1px rgba(0,0,0,0.35); /* The third layer shadow */
+		margin-top: 5px;
+		margin-left: 10px;
+		margin-right: 30px;
+		margin-bottom: 5px;
+	}
+	
+	.vert-cent {
+		position: relative;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	
+	hr
+	{
+		border: 0;
+		height: 1px;
+		background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+	}
+</style>
+
+<html>
+<head>
+	<title>How Do Vision-Language Models Process Conflicting Information Across Modalities?</title>
+	<meta property="og:image" content="Path to my teaser.png"/> <!-- Facebook automatically scrapes this. Go to https://developers.facebook.com/tools/debug/ if you update and want to force Facebook to rescrape. -->
+	<meta property="og:title" content="Creative and Descriptive Paper Title." />
+	<meta property="og:description" content="Paper description." />
+
+	<!-- Get from Google Analytics -->
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src=""></script> 
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-75863369-6');
+	</script>
+</head>
+
+<body>
+	<center>
+		<br>
+		<span style="font-size:36px "><b>How Do Vision-Language Models Process Conflicting Information Across Modalities?</b></span>
+		<br>
+		<br>
+
+		<table align=center width=600px>
+			<table align=center width=800px>
+				<tr>
+					<td align=center width=100px>
+						<center>
+							<span style="font-size:24px"><a href="https://ethahtz.github.io/">Tianze (Etha) Hua*</a></span>
+							<br>
+							<span style="font-size:16px">Brown University</span>
+						</center>
+					</td>
+					<td align=center width=100px>
+						<center>
+							<span style="font-size:24px"><a href="https://tttyuntian.github.io/">Tian Yun*</a></span>
+							<br>
+							<span style="font-size:16px">Brown University</span>
+						</center>
+					</td>
+			
+					<td align=center width=100px>
+						<center>
+							<span style="font-size:24px"><a href="https://scholar.google.com/citations?user=sFyrSa8AAAAJ&hl=en">Ellie Pavlick</a></span>
+							<br>
+							<span style="font-size:16px">Brown University</span>
+						</center>
+					</td>
+				</tr>
+			</table>
+
+			<br>
+
+			<table align="center" width="300px">
+				<tbody><tr>
+					<td align="center" width="120px">
+						<center>
+							<div class="buttons" style="margin-bottom: 8px;"><a class="btn btn-primary" role="button" href="https://vlm-conflicting-information_processing.github.io/">[Paper]</a></div>
+						</center>
+					</td>
+					<td align="center" width="120px">
+						<center>
+							<div class="buttons" style="margin-bottom: 8px;"><a class="btn btn-primary" role="button" href="https://github.com/ethahtz/vlm_conflicting_info_processing">[Code]</a></div>
+						</center>
+					</td>
+				</tr>
+			</tbody></table>
+			
+		</table>
+	</center>
+
+	<hr>
+
+	<table align=center width=850px>
+		<center><h1>Abstract</h1></center>
+		<tr>
+			<td style="text-align: justify;">
+				AI models are increasingly required to be multimodal, integrating disparate input streams into a coherent state representation on which subsequent behaviors and actions can be based. This paper seeks to understand how such models behave when input streams present conflicting information. Focusing specifically on vision-language models, we provide inconsistent inputs (e.g., an image of a dog paired with the caption "A photo of a cat") and ask the model to report the information present in one of the specific modalities (e.g., "What does the caption say / What is in the image?"). We find that models often favor one modality over the other, e.g., reporting the image regardless of what the caption says, but that different models differ in which modality they favor. We find evidence that the behaviorally preferred modality is evident in the internal representational structure of the model, and that specific attention heads can restructure the representations to favor one modality over the other. Moreover, we find modality-agnostic "router heads" which appear to promote answers about the modality requested in the instruction, and which can be manipulated or transferred in order to improve performance across datasets and modalities. Together, the work provides essential steps towards identifying and controlling if and how models detect and resolve conflicting signals within complex multimodal environments.
+			</td>
+		</tr>
+	</table>
+
+	<br><hr>
+
+	<!-- <hr>
+	<center><h1>Video Presentation</h1></center>
+	<p align="center">
+		<iframe width="660" height="395" src="TODO_VIDEO_LINK" frameborder="0" allowfullscreen align="center"></iframe>
+	</p>
+	<hr> -->
+
+
+	<center><h1>Examples of Conflicting Information Across Modalities</h1></center>
+	<table align=center width=100px>
+		<center><tr>
+			<td align=center width=100px>
+				<center>
+					<img class="round" style="width:800px" src="./resources/Prompt_examples.jpg" alt="Examples of inconsistent image and caption pairs."/>
+				</center>
+			</td>
+		</tr></center>
+	</table>
+	<br>
+	<table align=center width=850px>
+		<center>
+			<tr>
+				<td style="text-align: justify;">
+					<br>Examples of inconsistent image and caption pairs.
+					
+					<br><br><b>Left</b>: image and caption disagrees on the main object of the image.
+					
+					<br><br><b>Right</b>: image and caption disagrees on an attribute of the main object of the image. Either case, model needs to report image or caption information based on the target modality.
+				</td>
+			</tr>
+		</center>
+	</table>
+	<br><hr>
+
+
+	<center><h1>Model Performance on Conflicting Multimodal Information Tasks</h1></center>
+	<table align=center width=100px>
+		<center><tr>
+			<td align=center width=100px>
+				<center>
+					<img class="round" style="width:900px" src="./resources/behavior_bars.png" alt="Model performance on reporting target modality information under unimodal inputs and inconsistent inputs."/>
+				</center>
+			</td>
+		</tr></center>
+	</table>
+	<br>
+	<table align=center width=850px>
+		<center>
+			<tr>
+				<td style="text-align: justify;">
+					<br>Model performance on reporting target modality information under unimodal inputs and inconsistent inputs. <b>Horizontal bars</b> show accuracy for each model–dataset pair when the model is asked to report either the image (left column in every panel) or the caption (right column). 
+					<t style="background-color: rgb(65, 198, 251);">Blue bars</t>: Unimodal baseline (only input from the target modality is provided). <t style="background-color: rgb(191, 244, 32);">Green bars</t>: Inconsistent-input condition. <u>All models illustrate accuracy drop when conflicting information from the other modality is introduced, indicating cross-modal interference between the inputs. </u>
+				</td>
+			</tr>
+		</center>
+	</table>
+	<br><hr>
+
+
+	<center><h1>Three Hypotheses of Performance Degradation under Conflicting Inputs</h1></center>
+
+	<table align=center width=850px>
+		<center>
+			<tr align=center>
+				<td>
+					<h3><b>1. Do VLMs Fail to Encode Unimodal Information?</b></h3>
+				</td>
+			</tr>
+		</center>
+	</table>
+	<table align=center width=400px>
+		<tr>
+			<td align=center width=800px>
+				<center>
+					<td><img class="round" style="width:900px" src="./resources/probe_unimodal_information.png"/></td>
+				</center>
+			</td>
+		</tr>
+	</table>
+	<table align=center width=850px>
+		<center>
+			<tr>
+				<td style="text-align: justify;">
+					<br>Accuracy of unimodal information probe on Pascal VOC dataset. 
+    				Probe accuracies remain high on unimodal information probe on the last layers, indicating that <u>VLMs can sufficiently encode the information of each modality.</u>
+				</td>
+			</tr>
+		</center>
+	</table>
+	
+	<br>
+
+	<table align=center width=850px>
+		<center>
+			<tr align=center>
+				<td>
+					<h3><b>2. Do VLMs Fail to Detect the Inconsistencies between Two Modalities?</b></h3>
+				</td>
+			</tr>
+		</center>
+	</table>
+	<table align=center width=400px>
+		<tr>
+			<td align=center width=800px>
+				<center>
+					<td><img class="round" style="width:900px" src="./resources/probe_consistency_information.png"/></td>
+				</center>
+			</td>
+		</tr>
+	</table>
+	<table align=center width=850px>
+		<center>
+			<tr>
+				<td style="text-align: justify;">
+					<br>Accuracy of consistency probe on Pascal VOC dataset. 
+    				Probe accuracies remain high on consistency probe on the last layers, indicating that <u>VLMs can sufficiently encode the information of consistency between two modalities.</u>
+				</td>
+			</tr>
+		</center>
+	</table>
+
+	<br>
+
+	<table align=center width=850px>
+		<center>
+			<tr align=center>
+				<td>
+					<h3><b>3. Do VLMs Inherently Favor One Modality over Another in Representational Space?</b></h3>
+				</td>
+			</tr>
+		</center>
+	</table>
+	<table align=center width=400px>
+		<tr>
+			<td align=center width=800px>
+				<center>
+					<td><img class="round" style="width:900px" src="./resources/clustering_results.png"/></td>
+				</center>
+			</td>
+		</tr>
+	</table>
+	<table align=center width=850px>
+		<center>
+			<tr>
+				<td style="text-align: justify;">
+					<br>Representational salience and behavioral accuracy. 
+					<br><br>(a) Layer-wise V-Measure of Qwen2.5-VL representations with regard to the image and caption labels of the inconsistent samples, on CIFAR-100 (top) and Pascal VOC (bottom); in CIFAR-100, captions are always encoded more saliently regardless of the target modality, which leads to a degraded performance for Qwen2.5-VL to report image informtion. In contrast, Qwen2.5-VL (re)organizes its representations in Pascal VOC to always align the target modality more saliently.
+   					<br><br>(b) Across all model–dataset–task triples, the V-Measure gap (target &minus; misleading) strongly predicts accuracy on the target modality (<i>r</i> = 0.94 , <i>p</i> < 0.001).
+
+					<br><br><u>In all, these patterns suggest that (1) models which perform poorly fail to (re)-organize their internal representations of the inputs in a way that is responsive to the instruction. (2) This ability to (re)cluster the inputs appears to be correlated with performance in general, across models and datasets.</u>
+				</td>
+			</tr>
+		</center>
+	</table>
+	
+	<br><hr>
+
+
+	<center><h1>Role of Attention Head in Conflicting Information Processing</h1></center>
+
+	<table align=center width=850px>
+		<center>
+			<tr align=center>
+				<td>
+					<h3><b>1. Modality-Agnostic Router Head & Modality-Specific Promotion Head</b></h3>
+				</td>
+			</tr>
+		</center>
+	</table>
+	<table align=center width=400px>
+		<tr>
+			<td align=center width=800px>
+				<center>
+					<td><img class="round" style="width:900px" src="./resources/head_types.png"/></td>
+				</center>
+			</td>
+		</tr>
+	</table>
+	<table align=center width=850px>
+		<center>
+			<tr>
+				<td style="text-align: justify;">
+					<br>We hypothesize that there exists a competition process when model needs to selectively recall information from one modality over another. We adjust the outputs of each attention from &alpha; ranged from -10.0 to 10.0, and identify three different types of attention heads.
+
+					<br><br>Figure above shows examples of different types of attention heads in Qwen2.5-VL found on Pascal VOC. First row shows the results on 100 data examples requesting for image information, while second row shows those requesting for caption information. <code>Baseline</code> represents original model's performance without intervention (i.e., &alpha;=1). After scaling up the attention head outputs by a factor of &alpha; (x-axis): 
+					<br>(1) <b>Modality-agnostic router head</b> promotes the answers corresponding to the target modality; 
+					<br>(2) <b>Image promotion head</b> always promotes the answers about image information; 
+					<br>(3) <b>Caption promotion head</b> always promotes the answers about caption information..</u>
+				</td>
+			</tr>
+		</center>
+	</table>
+	
+	<br>
+
+	<table align=center width=850px>
+		<center>
+			<tr align=center>
+				<td>
+					<h3><b>2. Cross-Dataset Generalization of Router Heads \& Promotion Heads</b></h3>
+				</td>
+			</tr>
+		</center>
+	</table>
+	<table align=center width=400px>
+		<tr>
+			<td align=center width=800px>
+				<center>
+					<td><img class="round" style="width:900px" src="./resources/head_generalization_on_relax.png"/></td>
+				</center>
+			</td>
+		</tr>
+	</table>
+	<table align=center width=850px>
+		<center>
+			<tr>
+				<td style="text-align: justify;">
+					<br>Cross-dataset generalization of modality-agnostic router head (L11H14), image promotion head (L19H26), and caption promotion head (L13H26) of Qwen2.5-VL. &Delta; computes the difference between the original model performance and the model performance with an attention head intervened. <u>The router head can generalize across majority of the tasks, except CUB-Color. The image/caption promotion heads invariantly improve model's capability on reporting the corresponding modality's information.</u>
+				</td>
+			</tr>
+		</center>
+	</table>
+
+	<br>
+
+	<table align=center width=850px>
+		<center>
+			<tr align=center>
+				<td>
+					<h3><b>3. Effects of Attention Head Intervention on Representational Salience</b></h3>
+				</td>
+			</tr>
+		</center>
+	</table>
+	<table align=center width=400px>
+		<tr>
+			<td align=center width=800px>
+				<center>
+					<td><img class="round" style="width:900px" src="./resources/head_generalization_on_clustering.png"/></td>
+				</center>
+			</td>
+		</tr>
+	</table>
+	<table align=center width=850px>
+		<center>
+			<tr>
+				<td style="text-align: justify;">
+					<br>Effect of intervening router head (L11H14), image promotion head (L19H26), or caption promotion head (L13H26) of Qwen2.5-VL on V-Measure difference between the target and non-target modality. &Delta; is the difference between the original model and the model with different intervened heads. <u>In general, attention head intervention will make the information of corresponding modality more salient in the representational space. We also observe a positive correlation between the change in V-Measure difference and the change in model’s performance.</u>
+				</td>
+			</tr>
+		</center>
+	</table>
+	
+	<br><hr>
+
+
+	<table align=center width=650px>
+		<center><h1>Paper and BibTex</h1></center>
+		<tr>
+			<td><img class="layered-paper-big" style="height:175px" src="./resources/paper.png"/></td>
+			<td><span style="font-size:14pt">Tianze (Etha) Hua*, Tian Yun*, Ellie Pavlick.<br>
+				<b>How Do Vision-Language Models Process Conflicting Information Across Modalities?</b><br>
+				Under Review.<br>
+				<!-- (<a href="./resources/camera-ready.pdf">camera ready</a>)<br> -->
+				<span style="font-size:4pt"><a href=""><br></a>
+				</span>
+			</td>
+		</tr>
+	</table>
+	<br><br>
+
+	<!-- <table align=center width=850px>
+		<center>
+			<tr>
+				<td style="background-color:#e1e1e1">
+					<pre><code>
+  @inproceedings{hua2024mothello,
+	title={mOthello: When Do Cross-Lingual Representation Alignment and Cross-Lingual Transfer Emerge in Multilingual Models?},
+	author={Tianze Hua and Tian Yun and Ellie Pavlick},
+	booktitle={2024 Annual Conference of the North American Chapter of the Association for Computational Linguistics},
+	year={2024}
+  }
+					</code></pre>
+				</td>
+			</tr>
+		</center>
+	</table> -->
+
+	<hr>
+	<br>
+
+	<table align=center width=900px>
+		<tr>
+			<td width=400px>
+				<left>
+					<center><h1>Acknowledgements</h1></center>
+					<br><br>
+					This template was originally made by <a href="http://web.mit.edu/phillipi/">Phillip Isola</a> and <a href="http://richzhang.github.io/">Richard Zhang</a> for a <a href="http://richzhang.github.io/colorization/">colorful</a> ECCV project; the code can be found <a href="https://github.com/richzhang/webpage-template">here</a>.
+				</left>
+			</td>
+		</tr>
+	</table>
+
+<br>
+</body>
+</html>
+
